@@ -1,1 +1,1 @@
-# custom-endpoint
+# WP Custom Endpoint Plugin
