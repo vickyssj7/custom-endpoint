@@ -7,3 +7,6 @@ Admin can modify this default endpoint under Settings > Custom Endpoint option a
 
     Wordpress - Tested on 5.5.3
     PHP Version >= 7.2
+
+
+## More info coming soon...
