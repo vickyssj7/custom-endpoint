@@ -6,27 +6,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Custom_Endpoint_Views {
 	public function __construct() {
-		add_filter( 'query_vars', array( $this, 'queryVars' ) );
+		add_action( 'init', array( $this, 'initEndpoint' ) );
+		add_filter( 'query_vars', array( $this, 'query_vars' ) );
 		add_action( 'template_include', array( $this, 'listUsers' ) );
 	}
 	
-	public function listUsers( $template ) {
-		global $wp_query;
-		if ( $wp_query->query_vars['name'] !== get_option('custom_endpoint_slug') ) {
-			return $template;
-		}
+	public function initEndpoint() {
+		add_rewrite_endpoint( get_option('custom_endpoint_slug'), EP_PERMALINK );
+		add_rewrite_rule( '^'. get_option('custom_endpoint_slug') .'$', 'index.php?'. get_option('custom_endpoint_slug') .'=1', 'top' );
 		
-		//if template being loaded from theme...
-		if( get_custom_template_directory() ) {
-			include_once( get_custom_template_directory() );
-		} else {
-			include_once( CUSTOM_ENDPOINT_TEMPLATE_PATH . '/template-endpoint.php' );
+		if(get_transient( 'custom_endpoint_flush' )) {
+			delete_transient( 'custom_endpoint_flush' );
+			flush_rewrite_rules();
 		}
 	}
 	
-	public function queryVars( $query_vars ) {
+	function query_vars( $query_vars ) {
 		$query_vars[] = get_option('custom_endpoint_slug');
 		return $query_vars;
+	}
+
+	
+	public function listUsers( $template ) {
+		if( get_query_var( get_option('custom_endpoint_slug'), false ) !== false ) {
+
+			//if template being loaded from theme...
+			$endpointTemplate = get_theme_template_directory();
+			if( $endpointTemplate )
+				return $endpointTemplate;
+
+			$endpointTemplate = CUSTOM_ENDPOINT_TEMPLATE_PATH . '/template-endpoint.php';
+			return $endpointTemplate;
+		}
+		
+		return  $template;
 	}
 }
 

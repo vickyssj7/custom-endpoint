@@ -26,8 +26,10 @@ class Custom_Endpoint_Main {
     }
 	
 	public function includes() {
+		include_once(dirname(CUSTOM_ENDPOINT_PLUGIN_FILE) .'/vendor/autoload.php');
 		include_once(dirname(CUSTOM_ENDPOINT_PLUGIN_FILE) . '/inc/core-functions.php');
 		include_once(dirname(CUSTOM_ENDPOINT_PLUGIN_FILE) . '/inc/class-custom-endpoint-options.php');
+		include_once(dirname(CUSTOM_ENDPOINT_PLUGIN_FILE) . '/inc/class-custom-endpoint-jsonlist.php');
 		include_once(dirname(CUSTOM_ENDPOINT_PLUGIN_FILE) . '/inc/class-custom-endpoint-views.php');
 	}
 	
@@ -40,8 +42,11 @@ class Custom_Endpoint_Main {
 		wp_enqueue_style( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-fawsm', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
 		wp_enqueue_style( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-datatable-css', 'https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css' );
 		wp_enqueue_style( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-main-css', esc_url( plugins_url( 'css/main.css', dirname(__FILE__) ) ) );
+		wp_enqueue_script( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-jquery', 'https://code.jquery.com/jquery-3.5.1.min.js' );
 		wp_enqueue_script( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-datatable-js', 'https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js' );
 		wp_enqueue_script( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-main-js', esc_url( plugins_url( 'js/main.js', dirname(__FILE__) ) ) , array(), '', true );
+		wp_localize_script( CUSTOM_ENDPOINT_PLUGIN_PREFIX .'-main-js', 'ajax_object',
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
 	}
 	
 	public function add_menu_page() {

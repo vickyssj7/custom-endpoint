@@ -32,12 +32,8 @@ if( !defined('CUSTOM_ENDPOINT_DEFAULT') ) {
 register_activation_hook(__FILE__, 'install' );
 register_deactivation_hook(__FILE__, 'uninstall' );
 function install() {
+	set_transient( 'custom_endpoint_flush', 1, 60 );
 	$custom_endpoint = CUSTOM_ENDPOINT_DEFAULT;
-	
-	add_action( 'init',  function() use($custom_endpoint) {
-		 add_rewrite_rule( $custom_endpoint .'/?$', 'index.php?'. $custom_endpoint, 'top' );
-	});
-	flush_rewrite_rules();
 	update_option('custom_endpoint_slug', $custom_endpoint);
 	update_option('custom_endpoint_activated', 1);
 }
