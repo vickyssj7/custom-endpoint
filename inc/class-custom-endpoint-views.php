@@ -31,7 +31,7 @@ class Custom_Endpoint_Views {
 		if( get_query_var( get_option('custom_endpoint_slug'), false ) !== false ) {
 
 			//if template being loaded from theme...
-			$endpointTemplate = get_theme_template_directory();
+			$endpointTemplate = get_list_template_from_theme();
 			if( $endpointTemplate )
 				return $endpointTemplate;
 

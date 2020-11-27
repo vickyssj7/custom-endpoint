@@ -19,6 +19,13 @@ get_header();
 		</table>
 	</div>
 </div>
+<div class = "single-user-modal hide">
+	<div class = "modal-body">
+		<h3 style="text-align:center;">Loading...</h3>
+	</div>
+	<div class = "modal-overlay">
+	</div>
+</div>
 <?php
 get_footer();
 ?>

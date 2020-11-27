@@ -14,6 +14,7 @@ class Custom_Endpoint_Jsonlist {
 		$this->api_endpoint = 'https://jsonplaceholder.typicode.com';
 		add_action( 'wp_ajax_users_list', array( $this, 'getUsersList' ) );
 		add_action( 'wp_ajax_nopriv_users_list', array( $this, 'getUsersList' ) );
+		add_action( 'wp_ajax_single_user', array( $this, 'getSingleUser' ) );
 		add_action( 'wp_ajax_nopriv_single_user', array( $this, 'getSingleUser' ) );
 	}
 	
@@ -34,7 +35,7 @@ class Custom_Endpoint_Jsonlist {
 							$obj->username,
 							$obj->email,
 							$obj->phone,
-							$obj->website,
+							'<a href = "http://'. $obj->website .'" target="_blank">'. $obj->website .'</a>',
 							'<a href = "#" data-userid="'. $obj->id .'" class = "view-user">View</a>'
 						];
 					}
@@ -50,16 +51,29 @@ class Custom_Endpoint_Jsonlist {
 	}
 	
 	public function getSingleUser() {
-		try {
-			$response = $this->client->request('GET', $this->api_endpoint .'/users/1');
-			if($response->getStatusCode() == 200) {
-				$result = json_decode($response->getBody());
-				return wp_send_json($result, 200);
+		if((int) $_GET['id']) {
+			try {
+				$response = $this->client->request('GET', $this->api_endpoint .'/users/'. (int) $_GET['id']);
+				if($response->getStatusCode() == 200) {
+					$result = json_decode($response->getBody());
+					ob_start();
+					//if template being loaded from theme...
+					$singleUserTemplate = get_list_template_from_theme();
+					if( $singleUserTemplate )
+						include_once($singleUserTemplate);
+
+					$singleUserTemplate = CUSTOM_ENDPOINT_TEMPLATE_PATH . '/template-single-user.php';
+					include_once($singleUserTemplate);
+
+					$content = ob_get_clean();
+					return wp_send_json(['data' => $content]);
+				}
+				return wp_send_json(['error' => 'Something went wrong'], 422);
+			} catch(\Exception $e) {
+				return wp_send_json(['error' => $e->getMessage() .', Line:  '. $e->getLine()], 500);
 			}
-			return wp_send_json(['error' => 'Something went wrong'], 422);
-		} catch(\Exception $e) {
-			return wp_send_json(['error' => $e->getMessage() .', Line:  '. $e->getLine()], 500);
 		}
+		return wp_send_json(['error' => 'Invalid ID Pass.'], 422);
 	}
 	
 	public function tableHeaders() {

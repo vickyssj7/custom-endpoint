@@ -15,6 +15,9 @@ class Custom_Endpoint_Options {
 			
 			if(empty($error)) {
 				update_option('custom_endpoint_slug', filter_var($_POST['custom_endpoint'], FILTER_SANITIZE_STRING));
+				add_rewrite_endpoint( get_option('custom_endpoint_slug'), EP_PERMALINK );
+				add_rewrite_rule( '^'. get_option('custom_endpoint_slug') .'$', 'index.php?'. get_option('custom_endpoint_slug') .'=1', 'top' );
+				flush_rewrite_rules();
 				$success = true;
 			}
 			
