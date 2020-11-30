@@ -8,7 +8,7 @@ Admin can modify this default endpoint under Settings > Custom Endpoint option a
     Wordpress - Tested on 5.5.3
     PHP Version >= 7.2
 
-# Hooks
+# Filter Hooks
    ### `custom_endpoint_users_json_list`
    This hook will allows to modify the users list response data.
    
