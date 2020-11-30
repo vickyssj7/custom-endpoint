@@ -9,13 +9,13 @@ Admin can modify this default endpoint under Settings > Custom Endpoint option a
     PHP Version >= 7.2
 
 # Hooks
-   ### custom_endpoint_users_json_list
+   ### `custom_endpoint_users_json_list`
    This hook will allows to modify the users list response data.
    
-   ### custom_endpoint_single_user_detail
+   ### `custom_endpoint_single_user_detail`
    This hook will allows to modify the single user response data.
    
-   ### custom_endpoint_table_headers
+   ### `custom_endpoint_table_headers`
    This hook will allows to modify the table headers.
 
 ## More info coming soon...
