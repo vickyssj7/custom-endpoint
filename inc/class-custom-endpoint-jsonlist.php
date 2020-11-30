@@ -24,19 +24,19 @@ class Custom_Endpoint_Jsonlist {
 			if($response->getStatusCode() == 200) {
 				$data = [];
 				$data['draw'] = 1;
-				$result = json_decode($response->getBody());
+				$result = apply_filters('custom_endpoint_users_json_list', json_decode($response->getBody(), true));
 				if(!empty($result) && is_array($result)) {
 					$data['recordsTotal'] = count($result);
 					$data['recordsFiltered'] = count($result);
 					foreach($result as $obj) {
 						$data['data'][] = [
-							$obj->id,
-							$obj->name,
-							$obj->username,
-							$obj->email,
-							$obj->phone,
-							'<a href = "http://'. $obj->website .'" target="_blank">'. $obj->website .'</a>',
-							'<a href = "#" data-userid="'. $obj->id .'" class = "view-user">View</a>'
+							$obj['id'],
+							$obj['name'],
+							$obj['username'],
+							$obj['email'],
+							$obj['phone'],
+							'<a href = "http://'. $obj['website'] .'" target="_blank">'. $obj['website'] .'</a>',
+							'<a href = "#" data-userid="'. $obj['id'] .'" class = "view-user">View</a>'
 						];
 					}
 				}
@@ -55,16 +55,16 @@ class Custom_Endpoint_Jsonlist {
 			try {
 				$response = $this->client->request('GET', $this->api_endpoint .'/users/'. (int) $_GET['id']);
 				if($response->getStatusCode() == 200) {
-					$result = json_decode($response->getBody());
+					$result = apply_filters('custom_endpoint_single_user_detail', json_decode($response->getBody()));
 					ob_start();
 					//if template being loaded from theme...
-					$singleUserTemplate = get_list_template_from_theme();
-					if( $singleUserTemplate )
+					$singleUserTemplate = get_single_user_template();
+					if( $singleUserTemplate ) {
 						include_once($singleUserTemplate);
-
-					$singleUserTemplate = CUSTOM_ENDPOINT_TEMPLATE_PATH . '/template-single-user.php';
-					include_once($singleUserTemplate);
-
+					} else {
+						$singleUserTemplate = CUSTOM_ENDPOINT_TEMPLATE_PATH . '/template-single-user.php';
+						include_once($singleUserTemplate);
+					}
 					$content = ob_get_clean();
 					return wp_send_json(['data' => $content]);
 				}
@@ -77,14 +77,14 @@ class Custom_Endpoint_Jsonlist {
 	}
 	
 	public function tableHeaders() {
-		return [
+		return apply_filters('custom_endpoint_table_headers', [
 			'id' => 'Id',
 			'name' => 'Name',
 			'username' => 'User Name',
 			'email' => 'Email',
 			'phone' => 'Phone',
 			'website' => 'Website',
-		];
+		]);
 	}
 
 }
