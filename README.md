@@ -5,7 +5,7 @@ Admin can modify this default endpoint under Settings > Custom Endpoint option a
 
 # Recommended
 
- * Wordpress > 4.7
+ * Wordpress >= 4.7
  * PHP Version >= 7.2
 
 # Filter Hooks
