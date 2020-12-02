@@ -3,10 +3,10 @@ Custom Endpoint plugin allows admin to get access to a new endpoint named `json-
 
 Admin can modify this default endpoint under Settings > Custom Endpoint option as per their need, and on saving the changes endpoint will be set to the new modified endpoint by admin user.
 
-# Min Requirements
+# Recommended
 
-    Wordpress - Tested on 5.5.3
-    PHP Version >= 7.2
+ * Wordpress > 4.7
+ * PHP Version >= 7.2
 
 # Filter Hooks
    ### `custom_endpoint_users_json_list`
