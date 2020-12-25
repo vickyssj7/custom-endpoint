@@ -17,5 +17,3 @@ Admin can edit this default endpoint by going under `Settings > Custom Endpoint 
    
 * ### custom_endpoint_table_headers
    This filter will allows to modify the table headers.
-
-## More info coming soon...
