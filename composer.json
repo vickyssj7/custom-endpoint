@@ -1,7 +1,7 @@
 {
 	"name": "WP Custom Endpoint",
-    "type": "wordpress-plugin",
-    "description": "Wordpress custom endpoint plugin.",
+	"type": "wordpress-plugin",
+	"description": "Wordpress custom endpoint plugin.",
 	"keywords": [
 		"wordpress",
 		"plugin"
