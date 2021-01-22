@@ -4,7 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-
 class Custom_Endpoint_Jsonlist {
 	
 	private $client;
@@ -30,13 +29,12 @@ class Custom_Endpoint_Jsonlist {
 					$data['recordsFiltered'] = count($result);
 					foreach($result as $obj) {
 						$data['data'][] = [
-							$obj['id'],
-							$obj['name'],
-							$obj['username'],
+							'<a href = "#" data-userid="'. $obj['id'] .'" class = "view-user">'. $obj['id'] .'</a>',
+							'<a href = "#" data-userid="'. $obj['id'] .'" class = "view-user">'. $obj['name'] .'</a>',
+							'<a href = "#" data-userid="'. $obj['id'] .'" class = "view-user">'. $obj['username'] .'</a>',
 							$obj['email'],
 							$obj['phone'],
-							'<a href = "http://'. $obj['website'] .'" target="_blank">'. $obj['website'] .'</a>',
-							'<a href = "#" data-userid="'. $obj['id'] .'" class = "view-user">View</a>'
+							'<a href = "http://'. $obj['website'] .'" target="_blank">'. $obj['website'] .'</a>'
 						];
 					}
 				}

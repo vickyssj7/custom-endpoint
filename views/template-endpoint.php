@@ -11,7 +11,6 @@ get_header();
 				<?php foreach($json_placeholder_data->tableHeaders() as $header_name) { ?>
 					<th><?=$header_name?></th>
 				<?php } ?>
-					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>

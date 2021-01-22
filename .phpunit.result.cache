@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":147:{a:2:{s:7:"defects";a:1:{s:38:"Custom_Endpoint_Test::testGetUsersList";i:4;}s:5:"times";a:1:{s:38:"Custom_Endpoint_Test::testGetUsersList";d:1.43;}}}

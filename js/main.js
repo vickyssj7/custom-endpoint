@@ -6,7 +6,12 @@ $(document).ready(function() {
 		searching: false,
 		ordering:  false,
 		"info": false,
-		"ajax": ajax_object.ajax_url +'?action=users_list'
+		"ajax": { 
+			url: ajax_object.ajax_url +'?action=users_list',
+			error: function(err) {
+				alert("Something went wrong, please try refreshing your browser.");
+			}
+		}
 	} );
 	
 	
@@ -22,8 +27,7 @@ $(document).ready(function() {
 				$('.single-user-modal .modal-body').html(res.data);
 			},
 			error: function(err) {
-				$('.single-user-modal').addClass('hide');
-				console.log(err);
+				$('.single-user-modal').html("Something went wrong! Please try refreshing your browser.");
 			}
 		});
 	});
