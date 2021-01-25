@@ -4,8 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+add_action('init', array('Custom_Endpoint_Main', 'initialize'));
 class Custom_Endpoint_Main {
 	protected static $_instance = null;
+	
+	public function initialize() {
+		$GLOBALS[__CLASS__] = new self;
+	}
 	
 	public function __construct() {
 		if(phpversion() >= 7.2) {

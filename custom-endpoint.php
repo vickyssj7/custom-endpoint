@@ -11,45 +11,64 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Define CUSTOM_ENDPOINT_PLUGIN_FILE.
-if ( ! defined( 'CUSTOM_ENDPOINT_PLUGIN_FILE' ) ) {
-    define( 'CUSTOM_ENDPOINT_PLUGIN_FILE', __FILE__);
-}
+add_filter( 'plugins_loaded', array( 'Custom_Endpoint_Init', 'instance' ) );
 
-// Define CUSTOM_ENDPOINT_PLUGIN_PREFIX.
-if ( ! defined( 'CUSTOM_ENDPOINT_PLUGIN_PREFIX' ) ) {
-    define( 'CUSTOM_ENDPOINT_PLUGIN_PREFIX', 'custom-endpoint');
-}
+class Custom_Endpoint_Init {
+	
+	protected static $_instance = null;
+	
+	public static function instance() {
+        if ( is_null( self::$_instance ) ) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
+	
+	public function __construct() {
+		$this->defineHelpers();
+		$this->hooks();
+		// Include the main class.
+		if ( ! class_exists( 'Custom_Endpoint_Main' ) ) {
+			include_once dirname( __FILE__) . '/inc/class-custom-endpoint-main.php';
+		}
+		Custom_Endpoint_Main::instance();
+	}
+	
+	public function defineHelpers() {
+		// Define CUSTOM_ENDPOINT_PLUGIN_FILE.
+		if ( ! defined( 'CUSTOM_ENDPOINT_PLUGIN_FILE' ) ) {
+			define( 'CUSTOM_ENDPOINT_PLUGIN_FILE', __FILE__);
+		}
 
-if( !defined('CUSTOM_ENDPOINT_TEMPLATE_PATH') ) {
-	define('CUSTOM_ENDPOINT_TEMPLATE_PATH', dirname(__FILE__) .'/views');
-}
+		// Define CUSTOM_ENDPOINT_PLUGIN_PREFIX.
+		if ( ! defined( 'CUSTOM_ENDPOINT_PLUGIN_PREFIX' ) ) {
+			define( 'CUSTOM_ENDPOINT_PLUGIN_PREFIX', 'custom-endpoint');
+		}
 
-if( !defined('CUSTOM_ENDPOINT_DEFAULT') ) {
-	define('CUSTOM_ENDPOINT_DEFAULT', 'json-placeholder-users');
-}
+		if( !defined('CUSTOM_ENDPOINT_TEMPLATE_PATH') ) {
+			define('CUSTOM_ENDPOINT_TEMPLATE_PATH', dirname(__FILE__) .'/views');
+		}
 
-register_activation_hook(__FILE__, 'install' );
-register_deactivation_hook(__FILE__, 'uninstall' );
-function install() {
-	set_transient( 'custom_endpoint_flush', 1, 60 );
-	$custom_endpoint = CUSTOM_ENDPOINT_DEFAULT;
-	update_option('custom_endpoint_slug', $custom_endpoint);
-	update_option('custom_endpoint_activated', 1);
-}
+		if( !defined('CUSTOM_ENDPOINT_DEFAULT') ) {
+			define('CUSTOM_ENDPOINT_DEFAULT', 'json-placeholder-users');
+		}
+	}
 
-function uninstall() {
-	flush_rewrite_rules();
-	delete_option('custom_endpoint_slug');
-	update_option('custom_endpoint_activated', 0);
-}
+	public function hooks() {
+		register_activation_hook( __FILE__, array($this, 'install') );
+		register_deactivation_hook( __FILE__, array($this, 'uninstall') );
+	}
+	
+	public function install() {
+		set_transient( 'custom_endpoint_flush', 1, 60 );
+		$custom_endpoint = CUSTOM_ENDPOINT_DEFAULT;
+		update_option('custom_endpoint_slug', $custom_endpoint);
+		update_option('custom_endpoint_activated', 1);
+	}
 
-// Include the main class.
-if ( ! class_exists( 'Custom_Endpoint_Main' ) ) {
-    include_once dirname( __FILE__) . '/inc/class-custom-endpoint-main.php';
+	public function uninstall() {
+		flush_rewrite_rules();
+		delete_option('custom_endpoint_slug');
+		update_option('custom_endpoint_activated', 0);
+	}
 }
-
-function custom_endpoint_init(){
-    return Custom_Endpoint_Main::instance();
-}
-custom_endpoint_init();
